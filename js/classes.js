@@ -160,7 +160,7 @@ class NPC {
   move(){
     this.time++
 
-    if(this.time > 100){
+    if(this.time > 360){
       this.time = 0
       this.dist = Math.random() * 10 | 0
       this.dir = 'wsad'[Math.random() * 4 | 0]
@@ -172,12 +172,12 @@ class NPC {
 
       if(this.dir == 'w') y -= .2
       if(this.dir == 's') y += .2
-      if(this.dir == 'a') x -= .2, this.flipped = this.oflipped
-      if(this.dir == 'd') x += .2, this.flipped = !this.oflipped
+      if(this.dir == 'a') x -= .2, this.flipped = !this.oflipped
+      if(this.dir == 'd') x += .2, this.flipped = this.oflipped
 
       this.dist -= .2
 
-      if(!this.env.getRoom().collide(this.x + this.collider.x, this.y + this.collider.y, this.collider.width, this.collider.height, this.id)){
+      if(!this.env.getRoom().collide(x + this.collider.x - 1, y + this.collider.y, this.collider.width + 2, this.collider.height, this.id)){
         this.x = x
         this.y = y
         this.step()
