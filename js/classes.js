@@ -119,7 +119,7 @@ class NPC {
     this.y = y
     this.width = width
     this.height = height
-    this.collider = collider || {x: 0, y: 13, width: this.width, height: 2}
+    this.collider = collider || {x: 0, y: this.height - 2, width: this.width, height: 2}
     this.oflipped = flipped
     this.flipped = flipped
 
@@ -202,6 +202,79 @@ class NPC {
   }
 }
 
+class Static {
+
+  constructor(src, x, y, width, height, collider, anim=false){
+    this.sprites = new Image()
+    this.sprites.src = src
+    this.x = x
+    this.y = y
+    this.width = width
+    this.height = height
+    this.collider = collider || {x: 0, y: this.height - 2, width: this.width, height: 2}
+    this.anim = anim
+
+    this.time = Math.random() * 540 | 0
+    this.time1 = 0
+    this.dist = 0
+    this.frame = 0
+  }
+
+  adopt(room, id){
+    this.room = room
+    this.env = this.room.env
+    this.id = id
+    this.ctx = this.env.ctx
+  }
+
+  draw(){
+    this.ctx.imageSmoothingEnabled = false
+    this.ctx.drawImage(
+      this.sprites,
+      this.frame * this.width, 0,
+      this.width, this.height,
+      this.x | 0, this.y | 0,
+      this.width, this.height
+    )
+  }
+
+  step(){
+    if(!(this.time1 % 3)){
+      this.frame++
+      this.dist--
+    }
+
+    this.time1++
+  }
+
+  move(){
+    if(this.anim){
+      this.time++
+
+      if(this.time > 540){
+        this.time = 0
+        this.dist = this.sprites.width / this.width
+      }
+
+      if(this.dist > 1){
+        this.step()
+      }
+      else {
+        this.frame = 0
+        this.time1 = 0
+      }
+    }
+  }
+
+  collide(x, y, width, height){
+    if(
+      x + width > this.x + this.collider.x && x < this.x + this.collider.x + this.collider.width &&
+      y + height > this.y + this.collider.y && y < this.y + this.collider.y + this.collider.height
+    ) return true
+    return false
+  }
+}
+
 
 class Room {
 
@@ -239,8 +312,14 @@ class Room {
     this.ctx.fillStyle = this.wall.bColor
     this.ctx.fillRect(0, this.wall.height * 3 / 4, this.width, this.wall.height / 4)
 
-    let cs = [this.env.player, ...this.contents, ...this.npcs].sort((a, b)=> a.y - b.y)
+    let cs = [this.env.player, ...this.contents, ...this.npcs].sort((a, b)=> a.y + a.height - b.y - b.height)
     cs.map(a=> a.draw())
+  }
+
+  moveContents(){
+    this.contents.forEach(a=>{
+      a.move()
+    })
   }
 
   moveNPCs(){
@@ -290,4 +369,6 @@ class Box {
     ) return true
     return false
   }
+
+  move(){}
 }
