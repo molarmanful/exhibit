@@ -1,24 +1,16 @@
 let env = new Env(board.getContext('2d'), new Player(), [
-  new Room(200, 200, '#fff', [new Box(10, 10, 10, 10)])
-])
+  new Room(200, 200, [new Box(0, 0, 200, 20, 'rgba(0, 0, 0, 0)')], [
+    new NPC('./media/morisprites.png', 10, 40, 8, 15),
+    new NPC('./media/zhanghuansprites.png', 180, 50, 5, 15, null, true)
+  ]
+)])
 
 let keys = {}
 
 let loop = _=>{
+  env.player.move(keys)
+  env.getRoom().moveNPCs()
   env.draw()
-
-  let x = env.player.x
-  let y = env.player.y
-
-  if(keys.w) y -= .5
-  if(keys.s) y += .5
-  if(keys.a) x -= .5
-  if(keys.d) x += .5
-
-  if(!env.getRoom().collide(x, y, env.player.width, env.player.height)){
-    env.player.x = x
-    env.player.y = y
-  }
 
   requestAnimationFrame(loop)
 }
@@ -31,7 +23,4 @@ onkeyup = e=>{
   keys[e.key] = false
 }
 
-board.width = innerWidth
-board.height = innerHeight
-
-loop()
+onload = loop
