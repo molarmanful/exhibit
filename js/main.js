@@ -1,7 +1,9 @@
 let env = new Env(board.getContext('2d'), new Player(), [
   new Room(200, 200, [new Box(0, 0, 200, 20, 'rgba(0, 0, 0, 0)')], [
     new NPC('./media/morisprites.png', 10, 40, 8, 15, null, true),
-    new NPC('./media/zhanghuansprites.png', 180, 50, 5, 15)
+    new NPC('./media/zhanghuansprites.png', 180, 50, 5, 15),
+    new NPC('./media/336sprites.png', 95, 170, 5, 15),
+    new NPC('./media/leewensprites.png', 50, 130, 5, 15)
   ]
 )])
 
