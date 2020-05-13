@@ -239,7 +239,7 @@ class Static {
   }
 
   step(){
-    if(!(this.time1 % 3)){
+    if(!(this.time1 % 5)){
       this.frame++
       this.dist--
     }
