@@ -79,16 +79,22 @@ class Player {
     let x = this.x
     let y = this.y
 
-    if(keys.w || keys.s || keys.a || keys.d){
+    if(keys.w || keys.s || keys.a || keys.d || keys[' ']){
       if(keys.w) y -= .2
       if(keys.s) y += .2
       if(keys.a) x -= .2, this.flipped = true
       if(keys.d) x += .2, this.flipped = false
 
-      if(!this.env.getRoom().collide(x, y + 13, 5, 2)){
+      let collide = this.env.getRoom().collide(x, y + 13, 5, 2)
+      let icollide = this.env.getRoom().collide(x - 1, y + 12, 7, 4)
+      if(keys[' '] && icollide && icollide.interact){
+        icollide.interact()
+      }
+
+      if(!collide){
         this.x = x
         this.y = y
-        this.step()
+        if(!keys[' ']) this.step()
       }
       else {
         this.frame = 0
@@ -104,15 +110,15 @@ class Player {
     if(
       x + width > this.x && x < this.x + this.width &&
       y + height > this.y + 13 && y < this.y + 15
-    ) return true
-    return false
+    ) return this
   }
 }
 
 
 class NPC {
 
-  constructor(src, x, y, width=5, height=15, collider, flipped=false){
+  constructor(name, src, x, y, width=5, height=15, collider, flipped=false){
+    this.name = name
     this.sprites = new Image()
     this.sprites.src = src
     this.x = x
@@ -197,14 +203,20 @@ class NPC {
       this.id != npci &&
       x + width > this.x + this.collider.x && x < this.x + this.collider.x + this.collider.width &&
       y + height > this.y + this.collider.y && y < this.y + this.collider.y + this.collider.height
-    ) return true
-    return false
+    ) return this
+  }
+
+  interact(){
+    if(document.getElementById(this.name)){
+      document.getElementById(this.name).style.display = 'inline-block'
+    }
   }
 }
 
 class Static {
 
-  constructor(src, x, y, width, height, collider, anim=false){
+  constructor(name, src, x, y, width, height, collider, anim=false){
+    this.name = name
     this.sprites = new Image()
     this.sprites.src = src
     this.x = x
@@ -270,8 +282,13 @@ class Static {
     if(
       x + width > this.x + this.collider.x && x < this.x + this.collider.x + this.collider.width &&
       y + height > this.y + this.collider.y && y < this.y + this.collider.y + this.collider.height
-    ) return true
-    return false
+    ) return this
+  }
+
+  interact(){
+    if(document.getElementById(this.name)){
+      document.getElementById(this.name).style.display = 'inline-block'
+    }
   }
 }
 
@@ -331,12 +348,11 @@ class Room {
   collide(x, y, width, height, npci){
     if(
       x < 0 || x + width > this.width ||
-      y < 0 || y + height > this.height ||
-      [...this.contents, ...this.npcs]
-        .concat(!isNaN(npci) ? this.env.player : [])
-        .some(a=> a.collide(x, y, width, height, npci))
-    ) return true
-    return false
+      y < 0 || y + height > this.height
+    ) return this
+    return [...this.contents, ...this.npcs]
+      .concat(!isNaN(npci) ? this.env.player : [])
+      .find(a=> a.collide(x, y, width, height, npci))
   }
 }
 
@@ -366,8 +382,7 @@ class Box {
     if(
       x + width > this.x && x < this.x + this.width &&
       y + height > this.y && y < this.y + this.height
-    ) return true
-    return false
+    ) return this
   }
 
   move(){}

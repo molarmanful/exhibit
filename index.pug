@@ -3,12 +3,41 @@ html
   head
     meta(charset='utf-8')
     title Exhibit
+    link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet')
     link(rel='stylesheet' href='./css/style.css')
 
   body
     .container
+      p(style='text-align: center; font-weight: bold') PERFORMING IDENTITY: A Virtual Exhibition
       canvas#board
-      p(style='text-align: center') WASD to move
+      p(style='text-align: center') WASD to move, SPACE next to people/objects to interact
+
+    mixin win(id, title, name, yr)
+      .win(id=id)
+        .content
+          .close(name=id) &#9746;
+          h1: i= title
+          h2= [name, yr].join`, `
+          block
+
+    +win('mori', 'Tea Ceremony III', 'Mariko Mori', '1995')
+      img(src='./media/works/teaceremonyiii.jpg')
+    +win('zhanghuan', 'Family Tree', 'Zhang Huan', '2001')
+      img(src='./media/works/famtree.jpg')
+    +win('336', '3x3x6', 'Shu Lea Cheang', '2019')
+      |<iframe width="560" height="315" src="https://www.youtube.com/embed/MUvqYPKekls" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    +win('leewen', 'Journey of a Yellow Man', 'Lee Wen', '1992-2012')
+      img(src='./media/works/yellowman.jpg')
+    +win('gericault', 'Consume Me', 'Gericault de la Rose', '2016')
+      img(src='./media/works/consumeme.jpg')
+    +win('buddha', 'TV Buddha', 'Nam June Paik', '1974/2002')
+      img(src='./media/works/tvbuddha.jpeg')
+    +win('chinternet', 'Chinternet Plus', 'Miao Ying', '2016')
+      img(src='./media/works/chinternetplus.jpg')
+    +win('aiweiwei', 'Dropping a Han Dynasty Urn', 'Ai Wei Wei', '1995')
+      img(src='./media/works/droppingjar.jpg')
+    +win('harsono', 'Writing in the Rain', 'FX Harsono', '2011')
+      |<iframe width="560" height="315" src="https://www.youtube.com/embed/wsFLxmk2ZLc" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
     script(src='./js/classes.js')
     script(src='./js/main.js')
