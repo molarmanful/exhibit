@@ -7,6 +7,7 @@ let env = new Env(board.getContext('2d'), new Player(), [
     new NPC('336', './media/336sprites.png', 95, 170, 5, 15),
     new NPC('leewen', './media/leewensprites.png', 50, 130, 5, 15),
     new NPC('gericault', './media/gericaultsprites.png', 120, 40, 5, 15),
+    new Static('about', './media/qsprite.png', 97, 70, 5, 10),
     new Static('buddha', './media/buddhasprite.png', 97, 12, 7, 12),
     new Static('chinternet', './media/pandasprite.png', 150, 150, 7, 10),
     new Static('aiweiwei', './media/jarsprites.png', 180, 170, 8, 15, null, true),
@@ -26,6 +27,11 @@ let loop = _=>{
 
 onkeydown = e=>{
   keys[e.key] = true
+  if(keys['Escape']){
+    document.querySelectorAll('.win').forEach(a=>{
+      a.style.display = 'none'
+    })
+  }
 }
 
 onkeyup = e=>{
