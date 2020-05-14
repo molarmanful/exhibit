@@ -86,7 +86,7 @@ class Player {
       if(keys.d) x += .2, this.flipped = false
 
       let collide = this.env.getRoom().collide(x, y + 13, 5, 2)
-      let icollide = this.env.getRoom().collide(x - 1, y + 12, 7, 4)
+      let icollide = this.env.getRoom().icollide(x - 1, y + 12, 7, 4)
       if(keys[' '] && icollide && icollide.interact){
         icollide.interact()
       }
@@ -353,6 +353,12 @@ class Room {
     return [...this.contents, ...this.npcs]
       .concat(!isNaN(npci) ? this.env.player : [])
       .find(a=> a.collide(x, y, width, height, npci))
+  }
+
+  icollide(x, y, width, height, npci){
+    return [...this.contents, ...this.npcs]
+      .concat(!isNaN(npci) ? this.env.player : [])
+      .find(a=> a.collide(x, y, width, height, npci) && a.interact)
   }
 }
 
